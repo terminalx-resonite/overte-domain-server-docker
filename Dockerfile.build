@@ -25,8 +25,9 @@ RUN cd /opt/overte-build \
     && export RELEASE_TYPE=PRODUCTION \
     && cmake -DSERVER_ONLY=1 -DOVERTE_CPU_ARCHITECTURE=-msse3 ..
 
+# put number after -j to limit cores.
 RUN cd /opt/overte-build/build \
-    && make
+    && make -j 
 
 RUN mv /opt/overte-build/build/libraries /opt/overte/libraries \
     && mv /opt/overte-build/build/assignment-client/assignment-client /opt/overte/assignment-client \
