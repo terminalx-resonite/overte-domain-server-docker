@@ -7,7 +7,7 @@ on:
 
 jobs:
   build-and-push:
-    runs-on: macos-13-xlarge
+    runs-on: macos-13-large
 
     steps:
     - name: Checkout code
