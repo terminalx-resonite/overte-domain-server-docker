@@ -1,5 +1,5 @@
 # Overte Server runtime image. domain-server-builder must be built first.
-FROM domain-server-builder as build
+FROM ghcr.io/terminalx-resonite/overte-domain-server-docker/domain-server-builder:latest as build
 
 LABEL maintainer="Micah (https://github.com/akamicah)"
 LABEL description="Overte domain server runtime"
