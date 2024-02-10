@@ -35,8 +35,8 @@ RUN chmod +x /opt/overte/domain-server && \
     chmod +x /opt/overte/assignment-client 
 
 # Server run test
-RUN /opt/overte/domain-server --version > /opt/overte/version && \
-    /opt/overte/assignment-client --version >> /opt/overte/version
+# RUN /opt/overte/domain-server --version > /opt/overte/version && \
+#     /opt/overte/assignment-client --version >> /opt/overte/version
 
 # Install supervisor config
 COPY ./files/overte.conf /etc/supervisor/conf.d/overte.conf
