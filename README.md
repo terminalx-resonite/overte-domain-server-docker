@@ -1,3 +1,7 @@
+# Build Status
+
+[![Docker Build](https://github.com/terminalx-resonite/overte-domain-server-docker/actions/workflows/deploy.yaml/badge.svg)](https://github.com/terminalx-resonite/overte-domain-server-docker/actions/workflows/deploy.yaml)
+
 # Overte Domain Server Docker Images
 
 Contained in this repo are two docker images which are used to build and run the Overte domain server as a docker image.
@@ -24,5 +28,5 @@ docker run -d --name overte-server -p 40100-40102:40100-40102 -p 40100-40102:401
 
 # Prebuilt Image
 
-If you would prefer, a prebuilt image for amd64 environments can be used by replacing `domain-server` with `akamicah/overte-domain-server:latest` in either the `docker run` command or the `docker-compose.yml` file.
+If you would prefer, a prebuilt image for amd64 environments can be used by replacing `domain-server` with `ghcr.io/overte-org/overte-domain-server-docker/domain-server:latest` in either the `docker run` command or the `docker-compose.yml` file.
 
