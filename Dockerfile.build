@@ -30,6 +30,7 @@ RUN cd /opt/overte-build/build \
     && make -j 
 
 RUN mv /opt/overte-build/build/libraries /opt/overte/libraries \
+    && cp -r /opt/overte-build /opt/overte/build \
     && mv /opt/overte-build/build/assignment-client/assignment-client /opt/overte/assignment-client \
     && mv /opt/overte-build/build/assignment-client/plugins /opt/overte/plugins \
     && mv /opt/overte-build/build/domain-server/domain-server /opt/overte/domain-server \
