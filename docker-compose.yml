@@ -1,7 +1,7 @@
 services:
   overte-server:
     #image: domain-server
-    image: akamicah/overte-domain-server:latest
+    image: ghcr.io/terminalx-resonite/overte-domain-server-docker/domain-server:latest
     container_name: overte-server
     restart: unless-stopped
     expose:
