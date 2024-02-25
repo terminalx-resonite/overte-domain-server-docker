@@ -29,7 +29,10 @@ RUN cd /opt/overte-build \
 RUN cd /opt/overte-build/build \
     && make -j 
 
-RUN find $(pwd) -type f -name "libnode.so.108" -exec cp {} /opt/overte/libraries/ \;
+RUN CURRENT_DIR=$(pwd) && \
+    TARGET_PATH="${CURRENT_DIR}/overte-files/vcpkg/" && \
+    find "${TARGET_PATH}" -type f -name "libnode.so.108" -exec cp {} /opt/overte/libraries/ \; || \
+    echo "libnode.so.108 not found in ${TARGET_PATH}"
 
 RUN mv /opt/overte-build/build/libraries /opt/overte/libraries \
     && mv /opt/overte-build/build/assignment-client/assignment-client /opt/overte/assignment-client \
