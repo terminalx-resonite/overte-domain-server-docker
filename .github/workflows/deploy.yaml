@@ -23,6 +23,13 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Create server builder
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          file: ./Dockerfile.build
+          push: true
+          tags: ghcr.io/${{ github.repository }}/domain-server-builder:latest
 
       - name: Build server runtime with compiled binaries
         uses: docker/build-push-action@v3
