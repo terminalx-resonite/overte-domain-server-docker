@@ -12,14 +12,13 @@ RUN apt update && apt install -y python3-full zip tzdata curl ninja-build git cm
     libqt5websockets5-dev qtscript5-dev qtdeclarative5-dev qtmultimedia5-dev libqt5webchannel5-dev qtwebengine5-dev libqt5xmlpatterns5-dev
 
 # Fetch repository
-RUN git clone https://github.com/daleglass-overte/overte.git /opt/overte-build/
+RUN git clone -b prebuild-fixes https://github.com/daleglass-overte/overte.git /opt/overte-build/
 
 # Build just the server
 RUN cd /opt/overte-build \
     && mkdir build \
     && cd ./build \
     && export OVERTE_USE_SYSTEM_QT=1 \
-    && export VIRCADIA_USE_SYSTEM_QT=1 \
     && export RELEASE_TYPE=PRODUCTION \
     && cmake -DSERVER_ONLY=1 -DOVERTE_CPU_ARCHITECTURE=-msse3 ..
 
