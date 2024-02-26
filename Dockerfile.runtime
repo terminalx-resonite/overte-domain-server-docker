@@ -23,7 +23,7 @@ RUN apt clean && rm -rf /var/lib/app/lists/*
 
 # Install libraries
 COPY --from=build /opt/overte/libraries/*/*.so /lib/
-COPY --from=build /root/overte-files/vcpkg/77b4e5f4/installed/x64-linux/lib/libnode.so.108 /lib/
+COPY --from=build /opt/overte/libraries/libnode.so.108 /lib/
 
 # Fetch built services
 RUN mkdir /opt/overte
