@@ -29,7 +29,7 @@ RUN cd /opt/overte-build \
 RUN cd /opt/overte-build/build \
     && make -j 
 
-RUN VCPKG_PATH=$(python3 ./prebuild.py --get-vcpkg-path --build-root . --quiet) && \
+RUN VCPKG_PATH=$(python3 /opt/overte-build/prebuild.py --get-vcpkg-path --build-root . --quiet) && \
     echo "VCPKG Path: $VCPKG_PATH" && \
     find "$VCPKG_PATH" -type f -name "libnode.so.108" -exec cp {} /opt/overte/libraries/ \; || \
     echo "libnode.so.108 not found in $VCPKG_PATH"
