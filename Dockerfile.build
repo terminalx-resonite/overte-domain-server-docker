@@ -1,9 +1,6 @@
 # Docker environment for building Overte server
 FROM ubuntu:22.04
 
-ARG REPO=https://github.com/overte-org/overte
-ARG TAG=master
-
 ARG DEBIAN_FRONTEND=noninteractive
 ARG TERM=linux
 
