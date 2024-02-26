@@ -19,6 +19,7 @@ RUN cd /opt/overte-build \
     && mkdir build \
     && cd ./build \
     && export OVERTE_USE_SYSTEM_QT=1 \
+    && export VIRCADIA_USE_SYSTEM_QT=1 \
     && export RELEASE_TYPE=PRODUCTION \
     && cmake -DSERVER_ONLY=1 -DOVERTE_CPU_ARCHITECTURE=-msse3 ..
 
