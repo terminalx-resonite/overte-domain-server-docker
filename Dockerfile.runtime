@@ -1,7 +1,7 @@
 # Overte Server runtime image. domain-server-builder must be built first.
-FROM domain-server-builder as build
+FROM ghcr.io/overte-org/overte-domain-server-docker/domain-server-builder:latest as build
 
-LABEL maintainer="Micah (https://github.com/akamicah)"
+LABEL maintainer="OfficialR3ido101 (https://github.com/OfficialR3ido101)"
 LABEL description="Overte domain server runtime"
 
 FROM ubuntu:22.04
@@ -23,6 +23,7 @@ RUN apt clean && rm -rf /var/lib/app/lists/*
 
 # Install libraries
 COPY --from=build /opt/overte/libraries/*/*.so /lib/
+COPY --from=build /opt/overte/libraries/libnode.so.108 /lib/
 
 # Fetch built services
 RUN mkdir /opt/overte
@@ -35,8 +36,8 @@ RUN chmod +x /opt/overte/domain-server && \
     chmod +x /opt/overte/assignment-client 
 
 # Server run test
-RUN /opt/overte/domain-server --version > /opt/overte/version && \
-    /opt/overte/assignment-client --version >> /opt/overte/version
+# RUN /opt/overte/domain-server --version > /opt/overte/version && \
+#     /opt/overte/assignment-client --version >> /opt/overte/version
 
 # Install supervisor config
 COPY ./files/overte.conf /etc/supervisor/conf.d/overte.conf

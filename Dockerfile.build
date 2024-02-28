@@ -1,9 +1,6 @@
 # Docker environment for building Overte server
 FROM ubuntu:22.04
 
-ARG REPO=https://github.com/overte-org/overte
-ARG TAG=master
-
 ARG DEBIAN_FRONTEND=noninteractive
 ARG TERM=linux
 
@@ -11,11 +8,11 @@ RUN mkdir /opt/overte-build \
     && mkdir /opt/overte
 
 # Install dependencies
-RUN apt update && apt install -y tzdata curl ninja-build git cmake g++ npm libssl-dev python3-distutils python3-distro mesa-common-dev libgl1-mesa-dev \
+RUN apt update && apt install -y python3-full zip tzdata curl ninja-build git cmake g++ npm libssl-dev python3-distutils python3-distro mesa-common-dev libgl1-mesa-dev \
     libqt5websockets5-dev qtscript5-dev qtdeclarative5-dev qtmultimedia5-dev libqt5webchannel5-dev qtwebengine5-dev libqt5xmlpatterns5-dev
 
 # Fetch repository
-RUN git clone --depth 1 --branch $TAG $REPO /opt/overte-build/
+RUN git clone https://github.com/overte-org/overte.git /opt/overte-build/
 
 # Build just the server
 RUN cd /opt/overte-build \
@@ -25,8 +22,14 @@ RUN cd /opt/overte-build \
     && export RELEASE_TYPE=PRODUCTION \
     && cmake -DSERVER_ONLY=1 -DOVERTE_CPU_ARCHITECTURE=-msse3 ..
 
+# put number after -j to limit cores.
 RUN cd /opt/overte-build/build \
-    && make
+    && make -j 
+
+RUN VCPKG_PATH=$(python3 /opt/overte-build/prebuild.py --get-vcpkg-path --build-root . --quiet) && \
+    echo "VCPKG Path: $VCPKG_PATH" && \
+    find "$VCPKG_PATH" -type f -name "libnode.so.108" -exec cp {} /opt/overte-build/build/libraries \; || \
+    echo "libnode.so.108 not found in $VCPKG_PATH"
 
 RUN mv /opt/overte-build/build/libraries /opt/overte/libraries \
     && mv /opt/overte-build/build/assignment-client/assignment-client /opt/overte/assignment-client \
