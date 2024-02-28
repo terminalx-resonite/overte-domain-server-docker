@@ -1,6 +1,6 @@
+version: "3.8"
 services:
   overte-server:
-    #image: domain-server
     image: ghcr.io/overte-org/overte-domain-server-docker/domain-server:latest
     container_name: overte-server
     restart: unless-stopped
