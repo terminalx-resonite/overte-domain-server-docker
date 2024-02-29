@@ -23,6 +23,6 @@ jobs:
 - name: Build server runtime with compiled binaries
         run: |
            podman build -t ghcr.io/${{ github.repository }}/domain-server-builder:latest -f ./Dockerfile.build .
-           podman build -t ghcr.io/${{ github.repository }}/domain-server:latest -f ./Dockerfile.runtime .
            podman push ghcr.io/${{ github.repository }}/domain-server-builder:latest
+           podman build -t ghcr.io/${{ github.repository }}/domain-server:latest -f ./Dockerfile.runtime .
            podman push ghcr.io/${{ github.repository }}/domain-server:latest
