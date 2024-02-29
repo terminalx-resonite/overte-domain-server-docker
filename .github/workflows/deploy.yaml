@@ -23,8 +23,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Build server runtime with compiled binaries
         run: >
-          podman build -t ghcr.io/${{ github.repository
-          }}/domain-server-builder:latest -f ./Dockerfile.build .
+          podman build -t ghcr.io/${{ github.repository }}/domain-server-builder:latest -f ./Dockerfile.build .
 
           podman push ghcr.io/${{ github.repository }}/domain-server-builder:latest
 
