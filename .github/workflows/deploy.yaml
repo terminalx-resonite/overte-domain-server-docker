@@ -1,28 +1,32 @@
+---
 name: Build and Push Domain Server Images
-
 on:
   push:
     branches:
       - main
       - testing
-
 jobs:
   build-and-push:
-    runs-on: [self-hosted, linux, podman, docker]
+    runs-on:
+      - self-hosted
+      - linux
+      - podman
+      - docker
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build server runtime with compiled binaries
+        run: >
+          podman build -t ghcr.io/${{ github.repository }}/domain-server-builder:latest -f ./Dockerfile.build .
 
-- name: Build server runtime with compiled binaries
-        run: |
-           podman build -t ghcr.io/${{ github.repository }}/domain-server-builder:latest -f ./Dockerfile.build .
-           podman push ghcr.io/${{ github.repository }}/domain-server-builder:latest
-           podman build -t ghcr.io/${{ github.repository }}/domain-server:latest -f ./Dockerfile.runtime .
-           podman push ghcr.io/${{ github.repository }}/domain-server:latest
+          podman push ghcr.io/${{ github.repository }}/domain-server-builder:latest
+
+          podman build -t ghcr.io/${{ github.repository }}/domain-server:latest -f ./Dockerfile.runtime .
+
+          podman push ghcr.io/${{ github.repository }}/domain-server:latest
