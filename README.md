@@ -1,6 +1,6 @@
 # Build Status
 
-[![Docker Build](https://github.com/terminalx-resonite/overte-domain-server-docker/actions/workflows/deploy.yaml/badge.svg)](https://github.com/terminalx-resonite/overte-domain-server-docker/actions/workflows/deploy.yaml)
+[![Podman-Build](https://github.com/overte-org/overte-domain-server-docker/actions/workflows/deploy.yaml/badge.svg)](https://github.com/overte-org/overte-domain-server-docker/actions/workflows/deploy.yaml)
 
 # Overte Domain Server Docker Images
 
