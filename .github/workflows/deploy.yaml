@@ -22,9 +22,7 @@ jobs:
 
 - name: Build server runtime with compiled binaries
         run: |
-          # Your build commands here
-          # For example:
-          # podman build -t ghcr.io/${{ github.repository }}/domain-server-builder:latest -f ./Dockerfile.build .
-          # podman build -t ghcr.io/${{ github.repository }}/domain-server:latest -f ./Dockerfile.runtime .
-          # podman push ghcr.io/${{ github.repository }}/domain-server-builder:latest
-          # podman push ghcr.io/${{ github.repository }}/domain-server:latest
+           podman build -t ghcr.io/${{ github.repository }}/domain-server-builder:latest -f ./Dockerfile.build .
+           podman build -t ghcr.io/${{ github.repository }}/domain-server:latest -f ./Dockerfile.runtime .
+           podman push ghcr.io/${{ github.repository }}/domain-server-builder:latest
+           podman push ghcr.io/${{ github.repository }}/domain-server:latest
