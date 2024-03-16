@@ -41,5 +41,5 @@ jobs:
 
       - name: Clean up
         run: >
-          podman system prune
+          podman system prune -f
 
