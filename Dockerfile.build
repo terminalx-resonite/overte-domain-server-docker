@@ -1,38 +1,58 @@
 # Docker environment for building Overte server
-FROM ubuntu:22.04
+FROM debian:12.5-slim
 
 ARG DEBIAN_FRONTEND=noninteractive
-ARG TERM=linux
+LABEL maintainer="OfficialR3ido101 (https://github.com/OfficialR3ido101)"
+LABEL description="Overte domain server builder"
 
-RUN mkdir /opt/overte-build \
-    && mkdir /opt/overte
+RUN mkdir /opt/overte
+WORKDIR /opt/overte
 
 # Install dependencies
-RUN apt update && apt install -y python3-full zip tzdata curl ninja-build git cmake g++ npm libssl-dev python3-distutils python3-distro mesa-common-dev libgl1-mesa-dev \
-    libqt5websockets5-dev qtscript5-dev qtdeclarative5-dev qtmultimedia5-dev libqt5webchannel5-dev qtwebengine5-dev libqt5xmlpatterns5-dev
+RUN apt update && apt install -y git cmake python-is-python3 libgl-dev libgl1-mesa-dev python3-pip wget pkg-config \
+ninja-build \
+qtbase5-dev \
+qtbase5-private-dev \
+qtwebengine5-dev \
+qtwebengine5-dev-tools \
+qtmultimedia5-dev \
+libqt5opengl5-dev \
+qtscript5-dev \
+libqt5scripttools5 \
+libqt5webchannel5-dev \
+libqt5websockets5-dev \
+qtxmlpatterns5-dev-tools \
+qttools5-dev \
+libqt5xmlpatterns5-dev \
+libqt5svg5-dev \
+python3-venv \
+qml-module-qtwebchannel \
+qml-module-qtquick-controls \
+qml-module-qtquick-controls2 \
+qml-module-qt-labs-settings \
+qml-module-qtquick-dialogs \
+qml-module-qtwebengine
 
-# Fetch repository
-RUN git clone https://github.com/overte-org/overte.git /opt/overte-build/
+RUN pip3 install conan --break-system-packages
 
 # Build just the server
-RUN cd /opt/overte-build \
-    && mkdir build \
-    && cd ./build \
-    && export OVERTE_USE_SYSTEM_QT=1 \
-    && export RELEASE_TYPE=PRODUCTION \
-    && cmake -DSERVER_ONLY=1 -DOVERTE_CPU_ARCHITECTURE=-msse3 ..
+RUN conan profile detect
 
-# put number after -j to limit cores.
-RUN cd /opt/overte-build/build \
-    && make -j 
+RUN conan remote add overte https://git.anotherfoxguy.com/api/packages/overte/conan
 
-RUN VCPKG_PATH=$(python3 /opt/overte-build/prebuild.py --get-vcpkg-path --build-root . --quiet) && \
-    echo "VCPKG Path: $VCPKG_PATH" && \
-    find "$VCPKG_PATH" -type f -name "libnode.so.108" -exec cp {} /opt/overte-build/build/libraries \; || \
-    echo "libnode.so.108 not found in $VCPKG_PATH"
+RUN git clone --branch conan https://github.com/AnotherFoxGuy/overte .
 
-RUN mv /opt/overte-build/build/libraries /opt/overte/libraries \
-    && mv /opt/overte-build/build/assignment-client/assignment-client /opt/overte/assignment-client \
-    && mv /opt/overte-build/build/assignment-client/plugins /opt/overte/plugins \
-    && mv /opt/overte-build/build/domain-server/domain-server /opt/overte/domain-server \
-    && mv /opt/overte-build/domain-server/resources /opt/overte/resources
+RUN conan install . -s build_type=Release -b missing -of build 
+
+RUN cd build && cmake .. -G Ninja -DCMAKE_TOOLCHAIN_FILE=generators/conan_toolchain.cmake -DCMAKE_INSTALL_PREFIX=redist -DSERVER_ONLY=ON -DCMAKE_POLICY_DEFAULT_CMP0091=NEW -DCMAKE_BUILD_TYPE=Release
+
+RUN cd build && ninja domain-server assignment-client
+
+RUN mkdir /opt/overte/files && mkdir /opt/overte/files/libs
+
+RUN cd /opt/overte/files
+RUN echo "hello"
+
+RUN cp -r /opt/overte/build/domain-server /opt/overte/files && cp -r /opt/overte/build/assignment-client /opt/overte/files
+RUN cp  /opt/overte/build/conanlibs/Release/* /opt/overte/files/libs
+RUN find /opt/overte/build/libraries -type f -name "*.so" -exec cp {} /opt/overte/files/libs \;

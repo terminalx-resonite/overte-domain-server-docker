@@ -1,10 +1,10 @@
 # Overte Server runtime image. domain-server-builder must be built first.
-FROM ghcr.io/overte-org/overte-domain-server-docker/domain-server-builder:latest as build
+FROM conan:latest as build
 
 LABEL maintainer="OfficialR3ido101 (https://github.com/OfficialR3ido101)"
 LABEL description="Overte domain server runtime"
 
-FROM ubuntu:22.04
+FROM debian:12.5-slim
 
 ARG DEBIAN_FRONTEND=noninteractive
 ARG TERM=linux
@@ -14,30 +14,29 @@ RUN echo UTC >/etc/timezone
 RUN echo 'APT::Install-Suggests "0";' >> /etc/apt/apt.conf.d/00-docker
 RUN echo 'APT::Install-Recommends "0";' >> /etc/apt/apt.conf.d/00-docker
 
-# Install dependencies
-RUN apt update && apt install -y tzdata supervisor libopengl-dev ca-certificates \
-    libqt5widgets5 libqt5network5 libqt5script5 libqt5core5a libqt5qml5 libqt5websockets5 libqt5gui5
+# # Install dependencies
+ RUN apt update && apt upgrade -y && apt install -y tzdata supervisor libopengl-dev ca-certificates \
+     libqt5widgets5 libqt5network5 libqt5script5 libqt5core5a libqt5qml5 libqt5websockets5 libqt5gui5
 
 # Cleanup
 RUN apt clean && rm -rf /var/lib/app/lists/*
 
 # Install libraries
-COPY --from=build /opt/overte/libraries/*/*.so /lib/
-COPY --from=build /opt/overte/libraries/libnode.so.108 /lib/
+COPY --from=build /opt/overte/files/libs /lib/
+#COPY --from=build /opt/overte/libraries/libnode.so.108 /lib/
 
 # Fetch built services
 RUN mkdir /opt/overte
-COPY --from=build /opt/overte/domain-server /opt/overte
-COPY --from=build /opt/overte/assignment-client /opt/overte
-COPY --from=build /opt/overte/plugins /opt/overte/plugins
-COPY --from=build /opt/overte/resources /opt/overte/resources
+COPY --from=build /opt/overte/files/ /opt/overte
+# COPY --from=build /opt/overte/plugins /opt/overte/plugins
+# COPY --from=build /opt/overte/resources /opt/overte/resources
 
-RUN chmod +x /opt/overte/domain-server && \
-    chmod +x /opt/overte/assignment-client 
+# RUN chmod +x /opt/overte/domain-server/domain-server && \
+#     chmod +x /opt/overte/assignment-client/assignment-client 
 
 # Server run test
 # RUN /opt/overte/domain-server --version > /opt/overte/version && \
-#     /opt/overte/assignment-client --version >> /opt/overte/version
+#     /opt/overte/assignment-client/assignment-client --version >> /opt/overte/version
 
 # Install supervisor config
 COPY ./files/overte.conf /etc/supervisor/conf.d/overte.conf
