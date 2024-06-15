@@ -23,20 +23,10 @@ RUN apt clean && rm -rf /var/lib/app/lists/*
 
 # Install libraries
 COPY --from=build /opt/overte/files/libs /lib/
-#COPY --from=build /opt/overte/libraries/libnode.so.108 /lib/
 
 # Fetch built services
 RUN mkdir /opt/overte
 COPY --from=build /opt/overte/files/ /opt/overte
-# COPY --from=build /opt/overte/plugins /opt/overte/plugins
-# COPY --from=build /opt/overte/resources /opt/overte/resources
-
-# RUN chmod +x /opt/overte/domain-server/domain-server && \
-#     chmod +x /opt/overte/assignment-client/assignment-client 
-
-# Server run test
-# RUN /opt/overte/domain-server --version > /opt/overte/version && \
-#     /opt/overte/assignment-client/assignment-client --version >> /opt/overte/version
 
 # Install supervisor config
 COPY ./files/overte.conf /etc/supervisor/conf.d/overte.conf
