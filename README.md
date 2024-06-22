@@ -8,6 +8,11 @@ Contained in this repo are two docker images which are used to build and run the
 
 Also contained is a docker-compose.yml file to run the domain server on your server using docker-compose.
 
+# Caveats
+
+The assignment-client ports need to be published on the same port as they are listening on, since the domain-server doesn't know which ports are published and tells connecting clients the wrong ports otherwise.
+This will work in most cases because of hole-punching, but more strict firewall setups will fail.
+
 # Build Instructions
 
 To build the domain server runtime image (Dockerfile.runtime), you must first build the overte server builder image (Dockerfile.build).
