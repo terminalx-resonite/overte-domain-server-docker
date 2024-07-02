@@ -1,4 +1,4 @@
-# Overte Server runtime image. domain-server-builder must be built first.
+# Overte Server runtime image. domain-server-builder must be built first. (Updated 02/07/2024)
 FROM ghcr.io/overte-org/overte-domain-server-docker/domain-server-builder:latest as build
 
 LABEL maintainer="OfficialR3ido101 (https://github.com/OfficialR3ido101)"
