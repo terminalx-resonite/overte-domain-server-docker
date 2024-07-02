@@ -1,4 +1,4 @@
-# Docker environment for building Overte server
+# Docker environment for building Overte server (Updated 02/07/2024)
 FROM ubuntu:22.04
 
 ARG DEBIAN_FRONTEND=noninteractive
