@@ -20,7 +20,7 @@ RUN cd /opt/overte-build \
     && cd ./build \
     && export OVERTE_USE_SYSTEM_QT=1 \
     && export RELEASE_TYPE=PRODUCTION \
-    && cmake -DSERVER_ONLY=1 -DBUILD_TOOLS=1 -DOVERTE_CPU_ARCHITECTURE=-msse3 ..
+    && cmake -DSERVER_ONLY=1 -DOVERTE_CPU_ARCHITECTURE=-msse3 ..
 
 # put number after -j to limit cores.
 RUN cd /opt/overte-build/build \
